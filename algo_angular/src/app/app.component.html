@@ -1,129 +1,46 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Proyecto Integrador E1.</title>
-    <style>
-        .highlight-yellow { background-color: yellow; }
-        .highlight-blue { background-color: blue; }
-        .highlight-green { background-color: green; }
-        .recuadro {
-            border: 2px solid #000; /* Borde negro de 2px */
-            padding: 10px; /* Espaciado interno */
-            margin: 5px; /* Espaciado externo */
-            display: inline-block; /* Mostrar en línea con otros elementos */
-            border-radius: 5px; /* Bordes redondeados */
-            background-color: #f0f0f0; /* Color de fondo */
-        }
-        .result-container {
-            border: 2px solid #000; /* Borde negro de 2px */
-            padding: 10px; /* Espaciado interno */
-            margin: 10px 0; /* Espaciado externo */
-            border-radius: 5px; /* Bordes redondeados */
-            background-color: #e0e0e0; /* Color de fondo */
-        }
-    </style>
-</head>
-<body>
-    <h1>Proyecto Integrador E1.</h1>
-    
-    <!-- File Inputs -->
-    <input type="file" id="file1" accept=".txt">
-    <input type="file" id="file2" accept=".txt">
-    
-    <!-- Operation Buttons and Result Container -->
-    <div class="result-container">
-        <!-- Operation Buttons -->
-        <button id="buscarBtn" class="recuadro" disabled>Buscar</button>
-        <button id="similitudBtn" class="recuadro" disabled>Similitud</button>
-        <button id="palindromoBtn" class="recuadro" disabled>Palíndromo</button>
-        
-        <!-- Search Pattern Input -->
-        <input type="text" id="searchPattern" placeholder="Buscar patrón">
-        
-        <!-- Auto-Complete Input -->
-        <input type="text" id="autoCompleteInput" placeholder="Auto-Completar">
-        <ul id="autoCompleteList"></ul>
-        
-        <!-- Result Display Area -->
-        <div id="resultContent"></div>
+<div class="container">
+    <h2>Actividad Integradora</h2>
+  
+    <!-- Botones de operaciones -->
+    <div class="operations-container">
+      <input type="text" placeholder="Buscar patrón" [(ngModel)]="searchPattern" />
+      <button (click)="buscar()" [disabled]="!fileContents[0]">Buscar</button>
+      <button (click)="palindromo()" [disabled]="!fileContents[0]">Palíndromo</button>
+      <input type="text" placeholder="Auto-Completar" [(ngModel)]="autocompleteInput" (input)="autoCompletar()" />
+      <ul *ngIf="autocompleteSuggestions.length">
+        <li *ngFor="let suggestion of autocompleteSuggestions">{{ suggestion }}</li>
+      </ul>
     </div>
-    
-    <!-- Text Display Areas -->
-    <div id="text1Content"></div>
-    <div id="text2Content"></div>
-    
-    <script>
-        // JavaScript to handle file loading and operations
-        const file1Input = document.getElementById('file1');
-        const file2Input = document.getElementById('file2');
-        const buscarBtn = document.getElementById('buscarBtn');
-        const similitudBtn = document.getElementById('similitudBtn');
-        const palindromoBtn = document.getElementById('palindromoBtn');
-        const text1Content = document.getElementById('text1Content');
-        const text2Content = document.getElementById('text2Content');
-        const resultContent = document.getElementById('resultContent');
-        
-        let text1 = '';
-        let text2 = '';
-
-        file1Input.addEventListener('change', handleFile1);
-        file2Input.addEventListener('change', handleFile2);
-
-        function handleFile1(event) {
-            const file = event.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    text1 = e.target.result;
-                    text1Content.textContent = text1;
-                    buscarBtn.disabled = false;
-                    palindromoBtn.disabled = false;
-                };
-                reader.readAsText(file);
-            }
-        }
-
-        function handleFile2(event) {
-            const file = event.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    text2 = e.target.result;
-                    text2Content.textContent = text2;
-                    if (text1) {
-                        similitudBtn.disabled = false;
-                    }
-                };
-                reader.readAsText(file);
-            }
-        }
-
-        // Function to handle the "Buscar" operation
-        buscarBtn.addEventListener('click', function() {
-            const searchPattern = document.getElementById('searchPattern').value;
-            if (searchPattern) {
-                const regex = new RegExp(searchPattern, 'gi');
-                const matches = text1.match(regex);
-                resultContent.textContent = matches ? `Found ${matches.length} matches` : 'No matches found';
-            }
-        });
-
-        // Function to handle the "Palíndromo" operation
-        palindromoBtn.addEventListener('click', function() {
-            const words = text1.split(/\s+/);
-            const palindromes = words.filter(word => word === word.split('').reverse().join(''));
-            resultContent.textContent = palindromes.length ? `Found palindromes: ${palindromes.join(', ')}` : 'No palindromes found';
-        });
-
-        // Function to handle the "Auto-Completar" operation
-        document.getElementById('autoCompleteInput').addEventListener('input', function() {
-            const input = this.value;
-            const suggestions = text1.split(/\s+/).filter(word => word.startsWith(input));
-            const autoCompleteList = document.getElementById('autoCompleteList');
-            autoCompleteList.innerHTML = suggestions.map(suggestion => `<li>${suggestion}</li>`).join('');
-        });
-    </script>
-</body>
-</html>
+  
+    <!-- Contenedor para los botones de carga -->
+    <div class="button-container">
+      <div>
+        <label for="fileInput1">Archivo 1:</label>
+        <input type="file" id="fileInput1" (change)="onFileSelected($event, 0)" accept=".txt" />
+      </div>
+      
+      <div>
+        <label for="fileInput2">Archivo 2:</label>
+        <input type="file" id="fileInput2" (change)="onFileSelected($event, 1)" accept=".txt" />
+      </div>
+    </div>
+  
+<!-- Contenedor para mostrar el contenido de los archivos -->
+<div class="file-container">
+    <div class="file-box" *ngIf="fileContents[0]">
+      <h4>Contenido del primer archivo:</h4>
+      <pre [innerHTML]="fileContents[0]"></pre>
+    </div>
+  
+    <div class="navigation-buttons">
+      <button (click)="anterior()" [disabled]="!fileContents[0]">↑</button>
+      <button (click)="similitud()" [disabled]="!fileContents[0] || !fileContents[1]">SIM</button>
+      <button (click)="siguiente()" [disabled]="!fileContents[0]">↓</button>
+    </div>
+  
+    <div class="file-box" *ngIf="fileContents[1]">
+      <h4>Contenido del segundo archivo:</h4>
+      <pre [innerHTML]="fileContents[1]"></pre>
+    </div>
+  </div>
+  </div>

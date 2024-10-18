@@ -1,0 +1,38 @@
+.button-container {
+  display: flex; /* Hacer que los botones se alineen en fila */
+  gap: 20px; /* Espacio entre los botones */
+  margin-bottom: 20px; /* Espacio debajo de los botones */
+}
+
+.file-container {
+  display: flex; /* Hacer que los recuadros se alineen en fila */
+  gap: 20px; /* Espacio entre los recuadros */
+  align-items: center; /* Alinear verticalmente los elementos */
+}
+
+.file-box {
+  border: 1px solid #ccc;
+  padding: 10px;
+  border-radius: 5px;
+  background-color: #f9f9f9;
+  flex: 1; /* Para que los recuadros ocupen el mismo espacio */
+}
+
+.navigation-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 10px; /* Espacio entre los botones */
+}
+
+.navigation-buttons button {
+  padding: 10px;
+  font-size: 18px;
+  cursor: pointer;
+}
+
+/* Estilos para el texto remarcado */
+mark {
+  background-color: yellow; /* Color de fondo para remarcar */
+  color: black; /* Color del texto remarcado */
+  font-weight: bold; /* Texto en negrita */
+}
