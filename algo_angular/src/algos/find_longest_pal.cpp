@@ -2,6 +2,7 @@
 #include <fstream>
 #include <vector>
 #include <string>
+#include <algorithm>
 
 using namespace std;
 
@@ -13,6 +14,14 @@ string preprocess(const string &s)
         t += "#" + string(1, c);
     t += "#$";
     return t;
+}
+
+// Convierte todas las letras mayúsculas a minúsculas
+string to_lowercase(const string &s)
+{
+    string result = s;
+    transform(result.begin(), result.end(), result.begin(), ::tolower);
+    return result;
 }
 
 // Implementación del algoritmo de Manacher
@@ -56,15 +65,9 @@ pair<int, int> manacher_algo(const string &s)
 }
 
 // Función principal para ejecutar con archivo de texto
-int main(int argc, char *argv[])
+int main()
 {
-    if (argc != 2)
-    {
-        cerr << "Uso: " << argv[0] << "[filename]" << endl;
-        return 1;
-    }
-
-    string filename = argv[1];
+    string filename = "../testcases/text1.txt";
     string text;
 
     // Leer el archivo de texto
@@ -78,11 +81,21 @@ int main(int argc, char *argv[])
     getline(file, text, '\0');
     file.close();
 
+    // Convertir el texto a minúsculas
+    text = to_lowercase(text);
+
     // Ejecutar el algoritmo de Manacher
     pair<int, int> result = manacher_algo(text);
+    int start = result.first;
+    int length = result.second;
+    string palindrome = text.substr(start, length);
 
-    // Mostrar el resultado
-    cout << result.first << ", " << result.second << endl;
+    // Mostrar el resultado en formato JSON
+    cout << "{\n";
+    cout << "    \"pal\": \"" << palindrome << "\",\n";
+    cout << "    \"start\": " << start << ",\n";
+    cout << "    \"end\": " << start + length - 1 << "\n";
+    cout << "}" << endl;
 
     return 0;
 }
