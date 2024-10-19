@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
 import { FormsModule } from '@angular/forms';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-root',
@@ -16,6 +17,9 @@ export class AppComponent {
   searchPattern: string = '';
   autocompleteInput: string = '';
   autocompleteSuggestions: string[] = [];
+  sanitizedContent: SafeHtml[] = [];
+
+  constructor(private sanitizer: DomSanitizer) {}
 
   onFileSelected(event: Event, index: number): void {
     const input = event.target as HTMLInputElement;
@@ -26,7 +30,8 @@ export class AppComponent {
 
       reader.onload = () => {
         const content = reader.result as string;
-        this.fileContents[index] = this.highlightText(content, []);
+        this.fileContents[index] = content;
+        this.sanitizedContent[index] = this.sanitizer.bypassSecurityTrustHtml(content);
       };
 
       reader.readAsText(file);

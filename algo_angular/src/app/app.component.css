@@ -30,23 +30,22 @@
   cursor: pointer;
 }
 
-/* Estilos para el texto remarcado */
-mark {
-  background-color: yellow; /* Color de fondo para remarcar */
-  color: black; /* Color del texto remarcado */
-  font-weight: bold; /* Texto en negrita */
-}
-
 /* Estilos para el botón de palíndromo */
 mark.palindrome {
-  background-color: green; /* Color de fondo para el botón de palíndromo */
-  color: black; /* Color del texto del botón de palíndromo */
-  font-weight: bold; /* Texto en negrita */
+  background-color: green !important; /* Forzar el color de fondo */
+  color: black !important; /* Forzar el color del texto */
+  font-weight: bold;
 }
 
 mark.similarity {
   background-color: blue; /* Color de fondo para el botón de palíndromo */
   color: black; /* Color del texto del botón de palíndromo */
+  font-weight: bold; /* Texto en negrita */
+}
+
+mark {
+  background-color: yellow; /* Color de fondo para remarcar */
+  color: black; /* Color del texto remarcado */
   font-weight: bold; /* Texto en negrita */
 }
 
