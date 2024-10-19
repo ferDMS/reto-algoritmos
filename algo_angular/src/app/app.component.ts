@@ -13,6 +13,7 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 })
 export class AppComponent {
   title = 'algo_angular';
+  originalContents: string[] = ['', ''];
   fileContents: string[] = ['', ''];
   searchPattern: string = '';
   autocompleteInput: string = '';
@@ -30,8 +31,8 @@ export class AppComponent {
 
       reader.onload = () => {
         const content = reader.result as string;
-        this.fileContents[index] = content;
-        this.sanitizedContent[index] = this.sanitizer.bypassSecurityTrustHtml(content);
+        this.originalContents[index] = this.highlightText(content, []); 
+        this.fileContents[index] = this.highlightText(content, []);
       };
 
       reader.readAsText(file);
@@ -39,16 +40,16 @@ export class AppComponent {
   }
 
   buscar(): void {
-    if (this.fileContents[0] && this.searchPattern) {
-      const result1 = this.findPattern(this.fileContents[0], this.searchPattern);
+    if (this.originalContents[0] && this.searchPattern) {
+      const result1 = this.findPattern(this.originalContents[0], this.searchPattern);
       const intervals1 = JSON.parse(result1);
-      this.fileContents[0] = this.highlightText(this.fileContents[0], intervals1);
+      this.fileContents[0] = this.highlightText(this.originalContents[0], intervals1);
     }
 
-    if (this.fileContents[1] && this.searchPattern) {
-      const result2 = this.findPattern(this.fileContents[1], this.searchPattern);
+    if (this.originalContents[1] && this.searchPattern) {
+      const result2 = this.findPattern(this.originalContents[1], this.searchPattern);
       const intervals2 = JSON.parse(result2);
-      this.fileContents[1] = this.highlightText(this.fileContents[1], intervals2);
+      this.fileContents[1] = this.highlightText(this.originalContents[1], intervals2);
     }
 
     console.log(this.fileContents); // You can handle the result as needed
@@ -63,33 +64,25 @@ export class AppComponent {
   }
 
   similitud(): void {
-    if (this.fileContents[0] && this.fileContents[1]) {
-      const result = this.findLCS(this.fileContents[0], this.fileContents[1]);
+    if (this.originalContents[0] && this.originalContents[1]) {
+      const result = this.findLCS(this.originalContents[0], this.originalContents[1]);
       console.log(result); // You can handle the result as needed
     }
   }
 
   palindromo(): void {
-    if (this.fileContents[0]) {
-      const result1 = this.findLongestPalindrome(this.fileContents[0]);
+    if (this.originalContents[0]) {
+      const result1 = this.findLongestPalindrome(this.originalContents[0]);
       const { start: start1, end: end1 } = JSON.parse(result1);
       const intervals1 = start1 !== undefined && end1 !== undefined ? [{ start: start1, end: end1 }] : [];
-      this.fileContents[0] = this.highlightPalindrome(this.fileContents[0], intervals1);
+      this.fileContents[0] = this.highlightPalindrome(this.originalContents[0], intervals1);
     }
-
-    if (this.fileContents[1]) {
-      const result2 = this.findLongestPalindrome(this.fileContents[1]);
-      const { start: start2, end: end2 } = JSON.parse(result2);
-      const intervals2 = start2 !== undefined && end2 !== undefined ? [{ start: start2, end: end2 }] : [];
-      this.fileContents[1] = this.highlightPalindrome(this.fileContents[1], intervals2);
-    }
-
     console.log(this.fileContents); // You can handle the result as needed
   }
 
   autoCompletar(): void {
-    if (this.fileContents[0] && this.autocompleteInput) {
-      const result = this.autocomplete(this.fileContents[0], this.autocompleteInput);
+    if (this.originalContents[0] && this.autocompleteInput) {
+      const result = this.autocomplete(this.originalContents[0], this.autocompleteInput);
       this.autocompleteSuggestions = JSON.parse(result);
     }
     console.log(this.autocompleteSuggestions)
@@ -261,7 +254,7 @@ export class AppComponent {
     let endIndex2 = 0;
 
     for (let i = 1; i <= n; ++i) {
-      for (let j = 1; i <= m; ++j) {
+      for (let j = 1; j <= m; ++j) {
         if (text1[i - 1] === text2[j - 1]) {
           dp[i][j] = dp[i - 1][j - 1] + 1;
           if (dp[i][j] > maxLen) {
@@ -287,7 +280,6 @@ export class AppComponent {
       { text1: { start: result.start1, end: result.end1 } },
       { text2: { start: result.start2, end: result.end2 } }
     ];
-
     return JSON.stringify(output, null, 2);
   }
 
