@@ -98,7 +98,7 @@ export class AppComponent {
 
     intervals.forEach(interval => {
       highlightedContent += content.substring(lastIndex, interval.start);
-      highlightedContent += '<mark>' + content.substring(interval.start, interval.end + 1) + '</mark>';
+      highlightedContent += '<mark class="pattern">' + content.substring(interval.start, interval.end + 1) + '</mark>';
       lastIndex = interval.end + 1;
     });
 
