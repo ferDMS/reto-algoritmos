@@ -36,3 +36,23 @@ mark {
   color: black; /* Color del texto remarcado */
   font-weight: bold; /* Texto en negrita */
 }
+
+/* Estilos para el botón de palíndromo */
+mark.palindrome {
+  background-color: green; /* Color de fondo para el botón de palíndromo */
+  color: black; /* Color del texto del botón de palíndromo */
+  font-weight: bold; /* Texto en negrita */
+}
+
+mark.similarity {
+  background-color: blue; /* Color de fondo para el botón de palíndromo */
+  color: black; /* Color del texto del botón de palíndromo */
+  font-weight: bold; /* Texto en negrita */
+}
+
+/* styles.css */
+.wrap-text {
+  white-space: pre-wrap; /* Mantiene los saltos de línea */
+  word-wrap: break-word; /* Ajusta las palabras largas */
+  overflow-wrap: break-word; /* Ajusta las palabras largas */
+}

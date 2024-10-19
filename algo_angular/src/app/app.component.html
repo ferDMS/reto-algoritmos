@@ -1,35 +1,35 @@
 <div class="container">
-    <h2>Actividad Integradora</h2>
-  
-    <!-- Botones de operaciones -->
-    <div class="operations-container">
-      <input type="text" placeholder="Buscar patrón" [(ngModel)]="searchPattern" />
-      <button (click)="buscar()" [disabled]="!fileContents[0]">Buscar</button>
-      <button (click)="palindromo()" [disabled]="!fileContents[0]">Palíndromo</button>
-      <input type="text" placeholder="Auto-Completar" [(ngModel)]="autocompleteInput" (input)="autoCompletar()" />
-      <ul *ngIf="autocompleteSuggestions.length">
-        <li *ngFor="let suggestion of autocompleteSuggestions">{{ suggestion }}</li>
-      </ul>
+  <h2 class="wrap-text">Actividad Integradora</h2>
+
+  <!-- Botones de operaciones -->
+  <div class="operations-container">
+    <input type="text" placeholder="Buscar patrón" [(ngModel)]="searchPattern" class="wrap-text" />
+    <button (click)="buscar()" [disabled]="!fileContents[0]">Buscar</button>
+    <button (click)="palindromo()" [disabled]="!fileContents[0]">Palíndromo</button>
+    <input type="text" placeholder="Auto-Completar" [(ngModel)]="autocompleteInput" (input)="autoCompletar()" class="wrap-text" />
+    <ul *ngIf="autocompleteSuggestions.length" class="wrap-text">
+      <li *ngFor="let suggestion of autocompleteSuggestions">{{ suggestion }}</li>
+    </ul>
+  </div>
+
+  <!-- Contenedor para los botones de carga -->
+  <div class="button-container">
+    <div>
+      <label for="fileInput1">Archivo 1:</label>
+      <input type="file" id="fileInput1" (change)="onFileSelected($event, 0)" accept=".txt" class="wrap-text" />
     </div>
-  
-    <!-- Contenedor para los botones de carga -->
-    <div class="button-container">
-      <div>
-        <label for="fileInput1">Archivo 1:</label>
-        <input type="file" id="fileInput1" (change)="onFileSelected($event, 0)" accept=".txt" />
-      </div>
-      
-      <div>
-        <label for="fileInput2">Archivo 2:</label>
-        <input type="file" id="fileInput2" (change)="onFileSelected($event, 1)" accept=".txt" />
-      </div>
+    
+    <div>
+      <label for="fileInput2">Archivo 2:</label>
+      <input type="file" id="fileInput2" (change)="onFileSelected($event, 1)" accept=".txt" class="wrap-text" />
     </div>
-  
-<!-- Contenedor para mostrar el contenido de los archivos -->
-<div class="file-container">
+  </div>
+
+  <!-- Contenedor para mostrar el contenido de los archivos -->
+  <div class="file-container">
     <div class="file-box" *ngIf="fileContents[0]">
-      <h4>Contenido del primer archivo:</h4>
-      <pre [innerHTML]="fileContents[0]"></pre>
+      <h4 class="wrap-text">Contenido del primer archivo:</h4>
+      <pre [innerHTML]="fileContents[0]" class="wrap-text"></pre>
     </div>
   
     <div class="navigation-buttons">
@@ -39,8 +39,8 @@
     </div>
   
     <div class="file-box" *ngIf="fileContents[1]">
-      <h4>Contenido del segundo archivo:</h4>
-      <pre [innerHTML]="fileContents[1]"></pre>
+      <h4 class="wrap-text">Contenido del segundo archivo:</h4>
+      <pre [innerHTML]="fileContents[1]" class="wrap-text"></pre>
     </div>
   </div>
-  </div>
+</div>

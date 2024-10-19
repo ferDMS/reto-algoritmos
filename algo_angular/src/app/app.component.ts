@@ -26,7 +26,7 @@ export class AppComponent {
 
       reader.onload = () => {
         const content = reader.result as string;
-        this.fileContents[index] = this.highlightText(content, 10, 20);
+        this.fileContents[index] = this.highlightText(content, []);
       };
 
       reader.readAsText(file);
@@ -35,9 +35,18 @@ export class AppComponent {
 
   buscar(): void {
     if (this.fileContents[0] && this.searchPattern) {
-      const result = this.findPattern(this.fileContents[0], this.searchPattern);
-      console.log(result); // You can handle the result as needed
+      const result1 = this.findPattern(this.fileContents[0], this.searchPattern);
+      const intervals1 = JSON.parse(result1);
+      this.fileContents[0] = this.highlightText(this.fileContents[0], intervals1);
     }
+
+    if (this.fileContents[1] && this.searchPattern) {
+      const result2 = this.findPattern(this.fileContents[1], this.searchPattern);
+      const intervals2 = JSON.parse(result2);
+      this.fileContents[1] = this.highlightText(this.fileContents[1], intervals2);
+    }
+
+    console.log(this.fileContents); // You can handle the result as needed
   }
 
   anterior(): void {
@@ -57,9 +66,20 @@ export class AppComponent {
 
   palindromo(): void {
     if (this.fileContents[0]) {
-      const result = this.findLongestPalindrome(this.fileContents[0]);
-      console.log(result); // You can handle the result as needed
+      const result1 = this.findLongestPalindrome(this.fileContents[0]);
+      const { start: start1, end: end1 } = JSON.parse(result1);
+      const intervals1 = start1 !== undefined && end1 !== undefined ? [{ start: start1, end: end1 }] : [];
+      this.fileContents[0] = this.highlightPalindrome(this.fileContents[0], intervals1);
     }
+
+    if (this.fileContents[1]) {
+      const result2 = this.findLongestPalindrome(this.fileContents[1]);
+      const { start: start2, end: end2 } = JSON.parse(result2);
+      const intervals2 = start2 !== undefined && end2 !== undefined ? [{ start: start2, end: end2 }] : [];
+      this.fileContents[1] = this.highlightPalindrome(this.fileContents[1], intervals2);
+    }
+
+    console.log(this.fileContents); // You can handle the result as needed
   }
 
   autoCompletar(): void {
@@ -70,9 +90,42 @@ export class AppComponent {
     console.log(this.autocompleteSuggestions)
   }
 
-  highlightText(content: string, start: number, end: number): string {
-    return content.substring(0, start) + '<mark>' + content.substring(start, end) + '</mark>' + content.substring(end);
+  highlightText(content: string, intervals: { start: number, end: number }[]): string {
+    if (intervals.length === 0) {
+      return content;
+    }
+
+    let highlightedContent = '';
+    let lastIndex = 0;
+
+    intervals.forEach(interval => {
+      highlightedContent += content.substring(lastIndex, interval.start);
+      highlightedContent += '<mark>' + content.substring(interval.start, interval.end + 1) + '</mark>';
+      lastIndex = interval.end + 1;
+    });
+
+    highlightedContent += content.substring(lastIndex);
+    return highlightedContent;
   }
+
+  highlightPalindrome(content: string, intervals: { start: number, end: number }[]): string {
+    if (intervals.length === 0) {
+      return content;
+    }
+
+    let highlightedContent = '';
+    let lastIndex = 0;
+
+    intervals.forEach(interval => {
+      highlightedContent += content.substring(lastIndex, interval.start);
+      highlightedContent += '<mark class="palindrome">' + content.substring(interval.start, interval.end + 1) + '</mark>';
+      lastIndex = interval.end + 1;
+    });
+
+    highlightedContent += content.substring(lastIndex);
+    return highlightedContent;
+  }
+
 
   zAlgo(text: string, pattern: string) {
     let combined = pattern + "$" + text;
@@ -203,7 +256,7 @@ export class AppComponent {
     let endIndex2 = 0;
 
     for (let i = 1; i <= n; ++i) {
-      for (let j = 1; j <= m; ++j) {
+      for (let j = 1; i <= m; ++j) {
         if (text1[i - 1] === text2[j - 1]) {
           dp[i][j] = dp[i - 1][j - 1] + 1;
           if (dp[i][j] > maxLen) {
