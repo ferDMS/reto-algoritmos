@@ -1,5 +1,9 @@
 # Reto Algoritmos
 
+Fernando Daniel Monroy Sánchez
+
+A01750536
+
 ## Descripción
 
 El entregable consiste en una aplicación web para el procesamiento de archivos de texto plano. La aplicación permite realizar varias operaciones sobre los textos cargados, utilizando algoritmos específicos implementados desde cero. Las funcionalidades incluyen búsqueda de patrones, similitud entre textos, detección de palíndromos y auto-completado.
