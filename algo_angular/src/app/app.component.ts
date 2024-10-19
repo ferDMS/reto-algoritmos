@@ -66,7 +66,14 @@ export class AppComponent {
   similitud(): void {
     if (this.originalContents[0] && this.originalContents[1]) {
       const result = this.findLCS(this.originalContents[0], this.originalContents[1]);
-      console.log(result); // You can handle the result as needed
+      const parsedResult = JSON.parse(result);
+      const intervals1 = parsedResult[0].text1;
+      const intervals2 = parsedResult[1].text2;
+  
+      this.fileContents[0] = this.highlightSimilarity(this.originalContents[0], [intervals1]);
+      this.fileContents[1] = this.highlightSimilarity(this.originalContents[1], [intervals2]);
+  
+      console.log(this.fileContents); // You can handle the result as needed
     }
   }
 
@@ -123,7 +130,24 @@ export class AppComponent {
     highlightedContent += content.substring(lastIndex);
     return highlightedContent;
   }
-
+  
+  highlightSimilarity(content: string, intervals: { start: number, end: number }[]): string {
+    if (intervals.length === 0) {
+      return content;
+    }
+  
+    let highlightedContent = '';
+    let lastIndex = 0;
+  
+    intervals.forEach(interval => {
+      highlightedContent += content.substring(lastIndex, interval.start);
+      highlightedContent += '<mark class="similarity">' + content.substring(interval.start, interval.end + 1) + '</mark>';
+      lastIndex = interval.end + 1;
+    });
+  
+    highlightedContent += content.substring(lastIndex);
+    return highlightedContent;
+  }
 
   zAlgo(text: string, pattern: string) {
     let combined = pattern + "$" + text;

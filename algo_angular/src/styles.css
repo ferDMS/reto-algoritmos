@@ -7,7 +7,7 @@ mark.palindrome {
   }
 
 mark.similarity {
-background-color: blue; /* Color de fondo para el botón de palíndromo */
+background-color: rgba(0, 0, 255, 0.608); /* Color de fondo para el botón de palíndromo */
 color: black; /* Color del texto del botón de palíndromo */
 font-weight: bold; /* Texto en negrita */
 }
